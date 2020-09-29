@@ -20,7 +20,7 @@
           <div v-show="show">
             <v-divider></v-divider>
             <v-card-text>{{description}}</v-card-text>
-            <v-card-actions> <v-btn text="" :href="link"> VER MAS</v-btn></v-card-actions>
+            <v-card-actions> <v-btn text="" :href="link"> MORE</v-btn></v-card-actions>
           </div>
         </v-expand-transition>
       </v-card>

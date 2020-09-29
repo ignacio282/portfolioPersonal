@@ -2,25 +2,33 @@
   <div class="home">
     <!-- #region 1  -->
 
-    <v-container fluid class="hero">
+    <v-container fluid class="hero"  v-observe-visibility="visibilityChanged">
       <v-row align-content="center">
         <v-col cols="12">
-          <v-img class="mx-auto mb-16" src="https://imgur.com/KR4Re8b.png" width="400"></v-img>
-          <h1
+          <v-img
+            class="mx-auto mb-16"
+            src="https://imgur.com/KR4Re8b.png"
+            width="400"
+            transition="slide-x-reverse-transition"
+          ></v-img>
+          <v-slide-x-transition>
+          <h1  v-if="show"
             class="text-center text-h3 font-weight-black pb-5 pt-8"
           >Full-Stack Developer, Game Dev and Designer</h1>
+          </v-slide-x-transition>
+          
           <h2
             class="text-center text-h5 font-weight-light"
-          >I design and code beautifully simple things, and I love what I do.</h2>
+          >I code and design awesome things, and I love doing it.</h2>
 
-          <div class="text-center mt-16">
+          <div class="text-center mt-16" >
             <v-btn
               rounded
               color="grey darken-3"
               dark
               x-large
               @click="$vuetify.goTo('#contact', options)"
-            >Say Hi!</v-btn>
+            >Contact</v-btn>
           </div>
         </v-col>
         <v-col>
@@ -32,7 +40,7 @@
               @click="$vuetify.goTo('#portfolio', options)"
             >Learn more about my work</v-btn>
             <br />
-            <v-icon color="#cc921e">mdi-arrow-down-bold</v-icon>
+            <v-icon color="#cc921e" >mdi-arrow-down-bold</v-icon>
           </div>
         </v-col>
       </v-row>
@@ -42,16 +50,24 @@
     <!-- #region 2 -->
 
     <v-container fluid class="description" id="descripcion">
-      <h1 class="text-h4 font-weight-bold pb-7">Hi, I’m Ignacio. Nice to meet you.</h1>
-      <p class="text-h6 font-weight-light">
+      <v-slide-x-transition>
+      <h1 class="text-h4 font-weight-bold pb-7" v-if="show2" >Hi, I’m Ignacio. Nice to meet you.</h1>
+      </v-slide-x-transition>
+      <div v-observe-visibility="visibilityChanged2">
+      <v-slide-x-reverse-transition >
+      <p class="text-h6 font-weight-light" v-if="show2">
         I’m a freelance multimedia developer and designer, I’ve worked with institutions like the Universidad San Francisco de Quito (USFQ) and Companies as Paseo San Francisco, developing Web Sites, Web apps and mobile applications, I’ve also worked with small businesses in brand design, logo design, product photography and product branding.
-       <br> <br> I’m also a passionate game developer, I’ve developed small games for PC, mobile and VR ( Oculus Quest, Oculus Go and Samsung gear VR). I am quite confident, curious and perpetually working on improving my knowledge and learning new tools to create better products and become better at developing.
+        <br />
+        <br />I’m also a passionate game developer, I’ve developed small games for PC, mobile and VR ( Oculus Quest, Oculus Go and Samsung gear VR). I am quite confident, curious and perpetually working on improving my knowledge and learning new tools to create better products and become better at developing.
       </p>
+      
+      </v-slide-x-reverse-transition>
+      </div>
     </v-container>
 
     <!-- CARD -->
-
-    <v-card class="mx-auto tarjetaSkills" elevation="10" max-width="80%">
+    <v-slide-y-reverse-transition>
+    <v-card class="mx-auto tarjetaSkills" elevation="10" max-width="80%" v-if="show3" >
       <v-container class="pa-8" fluid>
         <v-row>
           <!-- FULL STACK -->
@@ -66,11 +82,8 @@
             </v-responsive>
 
             <h2 class="pa-5">Full-Stack Developer</h2>
-            <p
-              class="text-body-1 pa-5"
-            >I value simple content structure, clean design patterns, and thoughtful interactions.</p>
 
-            <h4 class="py-5 font-weight-regular subSkill">Languages I Know</h4>
+            <h4 class="py-5 font-weight-regular subSkill" >Languages I Know</h4>
             <p class="text-body-1 pb-5">HTML, CSS, JAVASCRIPT</p>
 
             <h4 class="py-5 font-weight-regular subSkill">Frameworks I Know</h4>
@@ -98,9 +111,6 @@
               <v-icon x-large class="py-5" color="#cc921e">mdi-gamepad-variant-outline</v-icon>
             </v-responsive>
             <h2 class="pa-5">Game Dev</h2>
-            <p
-              class="text-body-1 pa-5"
-            >I value simple content structure, clean design patterns, and thoughtful interactions.</p>
             <h4 class="py-5 font-weight-regular subSkill">Languages I Know</h4>
             <p class="text-body-1 pb-5">C#, C++</p>
 
@@ -126,9 +136,6 @@
               <v-icon x-large class="py-5" color="#cc921e">mdi-pencil-box-multiple-outline</v-icon>
             </v-responsive>
             <h2 class="pa-5">Multimedia Designer</h2>
-            <p
-              class="text-body-1 pa-5"
-            >I value simple content structure, clean design patterns, and thoughtful interactions.</p>
 
             <h4 class="py-5 font-weight-regular subSkill">Graphic Design</h4>
 
@@ -149,12 +156,13 @@
         </v-row>
       </v-container>
     </v-card>
+    </v-slide-y-reverse-transition>
     <!-- #endregion -->
 
     <!-- #region 3 -->
 
     <v-container fluid class="portfolio" id="portfolio">
-      <h1 class="text-center text-h4 font-weight-bold pb-7">My Work</h1>
+      <h1 class="text-center text-h4 font-weight-bold pb-7" v-observe-visibility="visibilityChanged3">My Work</h1>
       <p
         class="text-center text-body-1 pa-5"
       >Let me know if i can help you, i am a very versatile professional</p>
@@ -213,15 +221,55 @@ import { showAt, hideAt } from "vue-breakpoints";
 
 export default {
   name: "Home",
+  data(){
+    return{
+      show : false,
+      show2 :false,
+      show3: false
+    }
+
+  },
+  methods: {
+    visibilityChanged: function (isVisible, entry) {
+      this.isVisible = isVisible
+      if(isVisible==true){
+        this.show = true;
+      }
+      if(isVisible==false){
+        this.show = false;
+      }
+      
+      console.log(isVisible);
+      console.log("animacion " + this.show);
+    },
+    visibilityChanged2: function (isVisible2, entry) {
+      this.isVisible2 = isVisible2
+      if(isVisible2==true){
+        this.show2 = true;
+      }  
+      console.log(isVisible2);
+      console.log("animacion2 " + this.show2);
+    },
+    visibilityChanged3: function (isVisible3, entry) {
+      this.isVisible3 = isVisible3
+      if(isVisible3==true){
+        this.show3 = true;
+      }  
+      console.log(isVisible3);
+      console.log("animacion3 " + this.show3);
+    }
+  },
+  
   components: {
     hideAt,
     showAt
+  },
+  mounted() {
+    //this.show = true;
   }
 };
 </script>
 <style lang="scss" scoped>
-.home {
-}
 .hero {
   background: url("https://imgur.com/Wzc6Wql.png") center center no-repeat;
   background-size: cover;
